@@ -1,6 +1,6 @@
 # dictionary
 
-> a app for learning english word
+> a app for learning english word use vue framework
 
 ## Build Setup
 
