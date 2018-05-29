@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:8888/';
+axios.defaults.baseURL = 'http://localhost:8800';//https://iceyue.top/dict';
 axios.defaults.withCredentials = true;//开启cookie
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 export const login = (params)=> axios.post('/login',params);

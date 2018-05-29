@@ -11,7 +11,7 @@
         <setting v-show="view==='Setting'"></setting>
       </div>
       <footer>
-        <div class="favorite" :class="{active:view==='Favorite'}" @click="view='Favorite'">收藏</div>
+        <div class="favorite" :class="{active:view==='Favorite'}" @click="changeAndUpdateFavor">收藏</div>
         <div class="words" :class="{active:view==='Words'}" @click="view='Words'">单词</div>
         <div class="more" :class="{active:view==='More'}" @click="view='More'">更多</div>
         <div class="setting" :class="{active:view==='Setting'}" @click="view='Setting'">设置</div>
@@ -86,6 +86,10 @@
       closeTip() {
         this.showAlert = false;
         this.alertCallback && this.alertCallback();
+      },
+      changeAndUpdateFavor() {
+        this.view = 'Favorite';
+        this.$children[0].getMarkedWords();
       }
     }
   };
@@ -98,22 +102,25 @@
 </script>
 <style lang="scss" scoped>
   @import "../assets/mixin";
-  .body{
-    @include wh(100%,100%);
+
+  .body {
+    @include wh(100%, 100%);
   }
-  .view{
+
+  .view {
     height: calc(100% - 3.7rem);
   }
-  footer{
-    @include abs(auto,auto,0);
-    @include wh(100%,3.7rem);
+
+  footer {
+    @include abs(auto, auto, 0);
+    @include wh(100%, 3.7rem);
     @include sc(1.6rem, #ffffff);
     @include flex(space-around);
     background: $purple;
-    div{
+    div {
       width: 25%;
       line-height: 4rem;
-      &.active{
+      &.active {
         background: #FF7F50;
       }
     }

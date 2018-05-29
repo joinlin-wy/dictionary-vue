@@ -47,7 +47,7 @@ $purple: #757bff;
 }
 
 //宽高
-@mixin wh($width, $height) {
+@mixin wh($width, $height:auto) {
   width: $width;
   height: $height;
 }
