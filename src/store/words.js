@@ -1,20 +1,19 @@
-import {getWords, login, logout, markWord, register, getMarkedWords} from "../service/getData";
+import  * as DATA from "../service/getData";
 
 export const state = {
   wordList: [],
   account: '',
+  countNumber:10,
+  startIndex: 0,
   loaded: false,
   isLogin: false
 };
 export const mutations = {
   setWords(state, words) {
-    words.forEach((value) => {
-      if (!value.isMarked) {
-        value.isMarked = false;
-      }
-    });
-    state.wordList = words;
+    state.wordList = words.docs;
     state.loaded = true;
+    state.countNumber = words.countNumber;
+    state.startIndex = words.startIndex;
   },
   markWord(state, info) {
     state.wordList[info.index].isMarked = info.isMarked;
@@ -27,7 +26,7 @@ export const mutations = {
 };
 export const actions = {
   async login(context, params) {
-    let {data} = await login(params);
+    let {data} = await DATA.login(params);
     if (data.account) {
       context.commit('setUser', {account: data.account});
     }
@@ -37,13 +36,14 @@ export const actions = {
     return data;
   },
   async logout(context) {
-    await logout();
+    await DATA.logout();
     context.state.isLogin = false;
     context.state.user = null;
     localStorage.removeItem('-words-info-');
+    return true;
   },
   async register(context, params) {
-    let {data} = await register(params);
+    let {data} = await DATA.register(params);
     if (data.account) {
       context.commit('setUser', {account: data.account});
     }
@@ -53,12 +53,12 @@ export const actions = {
     return data;
   },
   async getWords(context) {
-    let data = await getWords(context.state.account);
-    context.commit('setWords', data.data.docs);
+    let data = await DATA.getWords(context.state.account);
+    context.commit('setWords', data.data);
     return true;
   },
   async markWord({commit}, index) {
-    let data = await markWord(state.wordList[index]);
+    let data = await DATA.markWord(state.wordList[index]);
     if (data.data.status) {
       commit('markWord', {
         index,
@@ -67,9 +67,16 @@ export const actions = {
     }
     return data.data.isMarked;
   },
-  async getMarkedWords(context){
-    let {data} = await getMarkedWords(context.state.account);
+  async getMarkedWords({state}) {
+    let {data} = await DATA.getMarkedWords(state.account);
+    return data;
+  },
+  async updateStartIndex({state}){
+    let {data} = await DATA.updateStartIndex(state.startIndex + state.countNumber);
+    return data;
+  },
+  async queryWord(context, word) {
+    let {data} = await DATA.queryWord(word);
     return data;
   }
-  
 };

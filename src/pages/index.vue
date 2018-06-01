@@ -5,7 +5,7 @@
     </transition>
     <div v-else style="height: 100%;">
       <div class="view">
-        <favorite v-show="view==='Favorite'"></favorite>
+        <favorite v-show="view==='Favorite'" ref="favorite"></favorite>
         <words v-show="view==='Words'"></words>
         <more v-show="view==='More'"></more>
         <setting v-show="view==='Setting'"></setting>
@@ -89,7 +89,7 @@
       },
       changeAndUpdateFavor() {
         this.view = 'Favorite';
-        this.$children[0].getMarkedWords();
+        this.$refs.favorite.getMarkedWords();
       }
     }
   };
@@ -104,6 +104,7 @@
   @import "../assets/mixin";
 
   .body {
+    @include sc(1.2rem,#000);
     @include wh(100%, 100%);
   }
 

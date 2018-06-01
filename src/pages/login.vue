@@ -65,6 +65,13 @@
     created() {
       this.userAccount = this.$store.state.account;
     },
+    mounted(){
+      document.addEventListener('keydown',(event) => {
+        if(event.keyCode === 13){
+          this.login();
+        }
+      })
+    },
     components: {
       alertTip
     },

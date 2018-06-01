@@ -13,7 +13,7 @@
         <li v-for="(word) in wordList"
             :key="word._id"
             class="swiper-slide"
-            >
+        >
           <p class="word">{{word.word}}</p>
           <p class="spelling">
             <span>英：</span>{{word.spelling['英']}}
@@ -30,12 +30,19 @@
           </p>
           <p class="sentences">
             {{word.sentences[0].en}}
-          </p>
-          <p class="sentences">
+            <br>
             {{word.sentences[0].zh}}
           </p>
         </li>
       </ul>
+      <transition name="fade"
+                  enter-active-class="animated fadeInUp"
+                  leave-active-class="animated fadeOutDown"
+      >
+        <div class="done" v-if="itemIndex === wordList.length-1">
+          <span @click="updateStartIndex">继续下轮学习</span>
+        </div>
+      </transition>
     </div>
     <audio id="dictVoice" style="display: none" src=""></audio>
   </div>
@@ -48,7 +55,8 @@
   export default {
     data() {
       return {
-        itemIndex: 0//当前第几个
+        itemIndex: 0,//当前第几个
+        wordSwiper: {}
       };
     },
     components: {
@@ -58,17 +66,17 @@
     },
     mounted() {
       let vm = this;
-      let wordSwiper = new Swiper('.swiper-container',{
+      this.wordSwiper = new Swiper('.swiper-container', {
         navigation: {
           nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
+          prevEl: '.swiper-button-prev'
         },
         on: {
-          slideChangeTransitionEnd: function(){
+          slideChangeTransitionEnd: function () {
             vm.itemIndex = this.activeIndex;//切换结束时，告诉我现在是第几个slide
-          },
-        },
-      })
+          }
+        }
+      });
     },
     computed: {
       ...mapState(['wordList'])
@@ -89,8 +97,16 @@
         console.log('favor clicked');
         let vm = this;
         this.$store.dispatch('markWord', this.itemIndex).then(function (isMarked) {
-          console.log("marked");
+          console.log("marked:"+isMarked);
         });
+      },
+      updateStartIndex(){
+        console.log('updateStartIndex');
+        this.$store.dispatch('updateStartIndex').then(() => {
+          return this.$store.dispatch('getWords');
+        }).then(() => {
+          this.wordSwiper.slideTo(0,500,true);
+        })
       }
     }
   };
@@ -122,16 +138,19 @@
       z-index: 10;
     }
   }
+
   .list {
     font-size: 1.2rem;
     height: calc(100% - 2.3rem);
   }
+
   ul {
     min-height: 500px;
   }
 
   ul li {
   }
+
   .icon {
     display: inline-block;
     cursor: pointer;
@@ -158,13 +177,26 @@
     line-height: 1.5;
   }
 
-  .sentences {
-    line-height: 2rem;
+  .swiper-button-prev, .swiper-button-next {
+    top: 1rem;
+    @include wh(1.5rem, 1.5rem);
+    margin-top: 0;
+    background-size: 100% 100%;
   }
-.swiper-button-prev,.swiper-button-next{
-  top: 1rem;
-  @include wh(1.5rem,1.5rem);
-  margin-top: 0;
-  background-size: 100% 100%;
-}
+  .done{
+    position: absolute;
+    bottom: 0;
+    z-index: 10;
+    @include wh(100%,3.5rem);
+    text-align: center;
+    animation-duration: 300ms;
+    span{
+      background: #07c6e8;
+      padding: 0.5rem 2rem;
+      line-height: 1.5rem;
+      border-radius: 2.5rem;
+      color: #ffffff;
+      box-shadow: #4d4d4d 0 0 1rem;
+    }
+  }
 </style>
