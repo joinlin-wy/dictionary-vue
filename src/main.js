@@ -4,10 +4,8 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import store from './store';
-import vue_touch from 'vue-touch'
 
 Vue.config.productionTip = false;
-Vue.use(vue_touch);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

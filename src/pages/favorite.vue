@@ -9,8 +9,8 @@
       </li>
     </ul>
     <div v-show="isDetail">
-      <div class="back" @click="isDetail = false">
-        <embed :src="back" type="">
+      <div class="back" @click="isDetail=false">
+        <img :src="back">
       </div>
       <word :word="curWord" v-if="isDetail"></word>
     </div>
@@ -94,6 +94,9 @@
     left: 10px;
     height: 1.9rem;
     padding: 0.2rem 0;
-    @include wh(1.9rem, 1.9rem)
+    @include wh(1.9rem, 1.9rem);
+  }
+  .back:hover{
+    cursor: pointer;
   }
 </style>

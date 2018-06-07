@@ -72,7 +72,11 @@ export const actions = {
     return data;
   },
   async updateStartIndex({state}){
-    let {data} = await DATA.updateStartIndex(state.startIndex + state.countNumber);
+    let {data} = await DATA.updateStartIndex(state.startIndex + parseInt(state.countNumber));
+    return data;
+  },
+  async updateCountNumber(context,countNumber){
+    let {data} = await DATA.updateCountNumber(countNumber);
     return data;
   },
   async queryWord(context, word) {

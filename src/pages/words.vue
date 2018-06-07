@@ -65,23 +65,26 @@
     created() {
     },
     mounted() {
-      let vm = this;
-      this.wordSwiper = new Swiper('.swiper-container', {
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev'
-        },
-        on: {
-          slideChangeTransitionEnd: function () {
-            vm.itemIndex = this.activeIndex;//切换结束时，告诉我现在是第几个slide
-          }
-        }
-      });
+      this.updateSwiper();
     },
     computed: {
       ...mapState(['wordList'])
     },
     methods: {
+      updateSwiper(){
+        let vm = this;
+        this.wordSwiper = new Swiper('.swiper-container', {
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+          },
+          on: {
+            slideChangeTransitionEnd: function () {
+              vm.itemIndex = this.activeIndex;//切换结束时，告诉我现在是第几个slide
+            }
+          }
+        });
+      },
       spell(word, type, event) {
         event.target.classList.add('active');
         let voice = document.getElementById('dictVoice');
@@ -95,7 +98,6 @@
       },
       markWord() {
         console.log('favor clicked');
-        let vm = this;
         this.$store.dispatch('markWord', this.itemIndex).then(function (isMarked) {
           console.log("marked:"+isMarked);
         });
